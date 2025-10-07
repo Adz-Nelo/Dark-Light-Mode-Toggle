@@ -1,42 +1,45 @@
 const body = document.querySelector('body');
 const btn = document.querySelector('.btn');
-const icon = document.querySelector('.btn__icon')
+const icon = document.querySelector('.btn__icon');
+const sunIcon = document.querySelector('.sun-icon');
+const moonIcon = document.querySelector('.moon-icon');
 
 function store(value) {
-    localStorage.setItem('dark-mode', value)
+    localStorage.setItem('dark-mode', value);
 }
 
 function load() {
-    const dark_mode = localStorage.getItem('dark-mode')
+    const darkMode = localStorage.getItem('dark-mode');
 
-    if(!dark_mode) {
-        store(false)
-        icon.classList.add('img/clear.png')
-    } else if (dark_mode == 'true') {
-        body.classList.add('dark-mode')
-        icon.classList.add('img/crescent-moon.png') 
-    } else if (dark_mode == 'false') {
-        icon.classList.add('img/clear.png')
-    } 
+    if (darkMode === 'true') {
+        body.classList.add('dark-mode');
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'block';
+    } else {
+        sunIcon.style.display = 'block';
+        moonIcon.style.display = 'none';
+    }
 }
 
-load(); 
+load();
 
 btn.addEventListener('click', () => {
-    body.classList.toggle('dark-mode')
-    icon.classList.add('animated')
+    body.classList.toggle('dark-mode');
+    icon.classList.add('animated');
 
-    store(body.classList.contains('dark-mode'))
+    const isDarkMode = body.classList.contains('dark-mode');
+    store(isDarkMode);
 
-    if (body.classList.contains('dark-mode')) {
-        icon.classList.remove('img/clear.png')
-        icon.classList.remove('img/crescent-moon.png')
+    // Toggle icons
+    if (isDarkMode) {
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'block';
     } else {
-        icon.classList.remove('img/crescent-moon.png')
-        icon.classList.add('img/clear.png')
+        sunIcon.style.display = 'block';
+        moonIcon.style.display = 'none';
     }
 
     setTimeout(() => {
-        icon.classList.remove('animated')
+        icon.classList.remove('animated');
     }, 500);
-})
+});

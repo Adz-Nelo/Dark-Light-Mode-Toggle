@@ -1,48 +1,143 @@
 :root {
     --color: #9176FF;
-    --dark-color: #2b2b2b;
+    --dark-color: #0f0f23;
     --dark-icon-color: #fff;
-    --light-color: #f7f7f7;
+    --light-color: #e8f4f8;
     --light-icon-color: #FFDE59;
+    --sun-color: #FFA500;
+    --moon-color: #f0f0f0;
 }
 
+/* Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Base layout */
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     height: 100vh;
-    background-color: var(--light-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    background-attachment: fixed;
+    font-family: 'Poppins', sans-serif;
+    transition: background 1s ease;
 }
 
+/* Sunlight glow layer */
+body::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(circle at 50% 20%, rgba(255, 223, 128, 0.7) 0%, transparent 60%),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    opacity: 1;
+    transition: opacity 0.8s ease;
+    pointer-events: none;
+}
+
+/* Stars (night mode) */
+.stars {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Stars placement */
+.star:nth-child(1) { width: 2px; height: 2px; top: 10%; left: 20%; animation-delay: 0s; }
+.star:nth-child(2) { width: 3px; height: 3px; top: 20%; left: 80%; animation-delay: 0.5s; }
+.star:nth-child(3) { width: 2px; height: 2px; top: 30%; left: 50%; animation-delay: 1s; }
+.star:nth-child(4) { width: 3px; height: 3px; top: 40%; left: 15%; animation-delay: 1.5s; }
+.star:nth-child(5) { width: 2px; height: 2px; top: 50%; left: 70%; animation-delay: 2s; }
+.star:nth-child(6) { width: 2px; height: 2px; top: 50%; left: 10%; animation-delay: 2.5s; }
+.star:nth-child(7) { width: 2px; height: 2px; top: 60%; left: 90%; animation-delay: 3s; }
+.star:nth-child(8) { width: 2px; height: 2px; top: 70%; left: 65%; animation-delay: 3.5s; }
+
+/* (You can keep your other star positions here) */
+
+/* Toggle Button */
 .btn {
-    background-color: var(--dark-icon-color);
+    background: linear-gradient(145deg, #fff6d2, #ffe08c);
     width: 15em;
     height: 8em;
     border-radius: 10em;
-    padding: 0 .5em;
-    box-shadow: inset 0px 8px 60px rgba(0,0,0, .1),
-                inset 0 8px 8px rgba(0,0,0, .1),
-                inset 0 -4px 4px rgba(0,0,0, .1);
+    padding: 0 0.5em;
+    box-shadow:
+        0 10px 25px rgba(255, 200, 50, 0.4),
+        inset 0 2px 5px rgba(255, 255, 255, 0.6);
     position: relative;
     display: flex;
     align-items: center;
     cursor: pointer;
+    transition: all 0.6s ease;
+    overflow: hidden;
+    z-index: 10;
+}
+
+/* Shine animation overlay */
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.6) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: skewX(-25deg);
+    animation: shine 4s infinite ease-in-out;
+}
+
+/* Shine motion */
+@keyframes shine {
+    0% { left: -150%; }
+    60% { left: 150%; }
+    100% { left: 150%; }
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow:
+        0 12px 35px rgba(255, 200, 50, 0.5),
+        inset 0 2px 5px rgba(255, 255, 255, 0.7);
 }
 
 .btn__indicator {
-    background-color: var(--dark-icon-color);
+    background: radial-gradient(circle at top left, #ffffff, #ffe680);
     width: 7em;
     height: 7em;
     border-radius: 50%;
     position: absolute;
-    box-shadow: 0 8px 40px rgba(0,0,0, .2);
-    transition: transform .3s ease;
+    box-shadow: 0 8px 25px rgba(255, 200, 50, 0.4);
+    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), background 1s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .btn__icon-container {
@@ -54,35 +149,91 @@ body {
 }
 
 .btn__icon {
-    width: 5rem;
+    width: 4rem;
+    height: 4rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    transition: all 0.3s ease;
 }
 
 .btn__icon.animated {
-    animation: spin .5s;
+    animation: spin 0.5s ease;
 }
 
 @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.1); }
+    100% { transform: rotate(360deg) scale(1); }
 }
 
+/* Text */
+h2 {
+    font-size: 2rem;
+    font-weight: 500;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    z-index: 10;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+/* Dark mode styles */
 body.dark-mode {
-    background-color: var(--dark-color);
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+    transition: background 1s ease;
 }
 
-.dark-mode .btn {
-    box-shadow: inset 0 8px 60px rgba(0,0,0, .3),
-                inset 8px 0 8px rgba(0,0,0, .3),    
-                inset 0 -4px 4px rgba(0,0,0, .3);   
-}  
+body.dark-mode::before {
+    opacity: 0;
+}
 
-.dark-mode .btn__indicator {
+body.dark-mode .stars {
+    opacity: 1;
+}
+
+body.dark-mode .btn {
+    background: linear-gradient(145deg, #2a2a3e, #1f1f2e);
+    box-shadow:
+        inset 0 8px 60px rgba(0,0,0, 0.5),
+        inset 8px 0 8px rgba(0,0,0, 0.3),
+        inset 0 -4px 4px rgba(0,0,0, 0.3),
+        0 10px 30px rgba(0,0,0, 0.5);
+}
+
+body.dark-mode .btn::after {
+    animation: none; /* disable shine in dark mode for realism */
+}
+
+body.dark-mode .btn__indicator {
     transform: translateX(7em);
-    background-color: var(--dark-color);
-    box-shadow: 0 8px 40px rgba(0,0,0, .3);
+    background: radial-gradient(circle at 40% 40%, #555b6e, #2a2a3e);
+    box-shadow: 0 8px 40px rgba(0,0,0, 0.5);
 }
 
-.dark-mode .btn__icon {
-    color: var(--dark-icon-color);
+/* Smooth return transition when toggling back */
+body:not(.dark-mode) .btn__indicator {
+    transform: translateX(0);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .btn {
+        width: 12em;
+        height: 6.4em;
+    }
+    .btn__indicator {
+        width: 5.6em;
+        height: 5.6em;
+    }
+    body.dark-mode .btn__indicator {
+        transform: translateX(5.6em);
+    }
+    .btn__icon {
+        width: 3.2rem;
+        height: 3.2rem;
+    }
+    h2 {
+        font-size: 1.5rem;
+        padding: 0 2rem;
+        text-align: center;
+    }
 }
