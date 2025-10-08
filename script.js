@@ -4,14 +4,15 @@ const icon = document.querySelector('.btn__icon');
 const sunIcon = document.querySelector('.sun-icon');
 const moonIcon = document.querySelector('.moon-icon');
 
+// Using in-memory storage instead of localStorage
+let darkModeState = false;
+
 function store(value) {
-    localStorage.setItem('dark-mode', value);
+    darkModeState = value;
 }
 
 function load() {
-    const darkMode = localStorage.getItem('dark-mode');
-
-    if (darkMode === 'true') {
+    if (darkModeState) {
         body.classList.add('dark-mode');
         sunIcon.style.display = 'none';
         moonIcon.style.display = 'block';
@@ -30,7 +31,6 @@ btn.addEventListener('click', () => {
     const isDarkMode = body.classList.contains('dark-mode');
     store(isDarkMode);
 
-    // Toggle icons
     if (isDarkMode) {
         sunIcon.style.display = 'none';
         moonIcon.style.display = 'block';
